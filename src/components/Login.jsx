@@ -43,24 +43,26 @@ const Login = () => {
     setPhoneError("");
     setPasswordError("");
 
-    let isValid = true;
+    let persons = [];
 
-    if (validatePhone(phone)) {
-      setPhoneError(validatePhone(phone));
-      isValid = false;
+    if (data && data.persons) persons = data.persons;
+
+    if (validatePhone(phone, persons)) {
+      setPhoneError(validatePhone(phone, persons));
     }
 
-    if (validatePassword(password)) {
-      setPasswordError(validatePassword(password));
-      isValid = false;
+    if (validatePassword(password, persons)) {
+      setPasswordError(validatePassword(password, persons));
     }
 
-    if (isValid) {
-      console.log('success');
+    if (!validatePhone(phone, persons) && !validatePassword(password, persons)) {
+      console.log("success");
     }
   };
 
-  console.log({ loading, data, error });
+  if (data && data.persons) {
+    console.log(data.persons);
+  }
 
   if (loading) return <h1>Loading...</h1>;
 
