@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../graphql/queries";
 import { Container, Grid, TextField, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import { validatePhone, validatePassword } from "../helpers/functions";
+import { Link } from "react-router-dom";
+
+import { create } from "zustand";
+const useStore = create((set) => ({
+  persons: [],
+  setPersons: (persons) => set({ persons }),
+}));
+
+const useFetchData = () => {
+  const { loading, data, error } = useQuery(GET_USERS);
+
+  useEffect(() => {
+    if (data && data.persons) {
+      useStore.getState().setPersons(data.persons);
+    }
+  }, [data]);
+
+  return { loading, data, error };
+};
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -30,7 +49,13 @@ const Login = () => {
   const [phoneError, setPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const { loading, data, error } = useQuery(GET_USERS);
+  const { loading, data, error } = useFetchData();
+
+  useEffect(() => {
+    console.log("Loading:", loading);
+    console.log("Data:", data);
+    console.log("Error:", error);
+  }, [data, error, loading]);
 
   const handlePhoneChange = (event) => {
     const input = event.target.value;
@@ -55,7 +80,10 @@ const Login = () => {
       setPasswordError(validatePassword(password, persons));
     }
 
-    if (!validatePhone(phone, persons) && !validatePassword(password, persons)) {
+    if (
+      !validatePhone(phone, persons) &&
+      !validatePassword(password, persons)
+    ) {
       console.log("success");
     }
   };
@@ -79,6 +107,7 @@ const Login = () => {
             variant="outlined"
             error={!!phoneError}
             helperText={phoneError}
+            inputMode="tel"
           />
         </Grid>
 
@@ -103,9 +132,22 @@ const Login = () => {
             ورود
           </Button>
         </Grid>
+
+        <Grid item xs={12}>
+          <Button variant="outlined" sx={{ fontFamily: "inherit" }} fullWidth>
+            <Link
+              to="/signup"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              ثبت نام
+            </Link>
+          </Button>
+        </Grid>
       </StyledGrid>
     </StyledContainer>
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
+export { useStore };
 export default Login;
