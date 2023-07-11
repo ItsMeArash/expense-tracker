@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../graphql/queries";
 import { Container, Grid, TextField, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import { validatePhone, validatePassword } from "../helpers/functions";
+import { validate } from "../helpers/functions";
 import { Link } from "react-router-dom";
 
 import { create } from "zustand";
@@ -69,23 +69,17 @@ const Login = () => {
     setPasswordError("");
 
     let persons = [];
-
     if (data && data.persons) persons = data.persons;
 
-    if (validatePhone(phone, persons)) {
-      setPhoneError(validatePhone(phone, persons));
-    }
+    const loginData = { phone, password };
+    const errors = validate(loginData, persons, "login");
 
-    if (validatePassword(password, persons)) {
-      setPasswordError(validatePassword(password, persons));
-    }
+    console.log(errors);
+    if (errors.phone) setPhoneError(errors.phone);
 
-    if (
-      !validatePhone(phone, persons) &&
-      !validatePassword(password, persons)
-    ) {
-      console.log("success");
-    }
+    if (errors.password) setPasswordError(errors.password);
+
+    if (Object.keys(errors).length === 0) console.log("success");
   };
 
   if (data && data.persons) {

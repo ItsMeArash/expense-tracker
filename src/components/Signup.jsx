@@ -1,9 +1,10 @@
-/* eslint-disable no-unused-vars */
+// /* eslint-disable no-unused-vars */
 import { Container, Grid, TextField, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "./Login";
+import { validate } from "../helpers/functions";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -25,7 +26,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const Signup = () => {
-  const persons = useStore(state => state.persons)
+  const persons = useStore((state) => state.persons);
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -37,9 +38,40 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const [rePasswordError, setRePasswordError] = useState("");
 
-  const handleSignup = () => {};
-  const handlePhoneChange = () => {};
-  const handleNameChange = () => {};
+  const handleSignup = () => {
+    setNameError("");
+    setPhoneError("");
+    setPasswordError("");
+    setRePasswordError("");
+
+    console.log(persons);
+    const signupData = { name, phone, password, rePassword }
+    const errors = validate(signupData, persons, "signup");
+    console.log(errors);
+
+    if (errors.name) setNameError(errors.name)
+    if (errors.phone) setPhoneError(errors.phone)
+    if (errors.password) setPasswordError(errors.password)
+    if (errors.rePassword) setRePasswordError(errors.rePassword)
+
+    if (!Object.keys(errors).length) console.log("success");
+
+
+  };
+  const handlePhoneChange = (event) => {
+    const input = event.target.value;
+    const numericValue = input.replace(/\D/g, "");
+
+    setPhone(numericValue);
+  };
+
+  const handleNameChange = (event) => {
+    const input = event.target.value;
+    const nameRegex = /[آ-ی ]+/g;
+    const persianValue = input.match(nameRegex)?.[0] ?? '';
+  
+    setName(persianValue);
+  };
 
   return (
     <StyledContainer>

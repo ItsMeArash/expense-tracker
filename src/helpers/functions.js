@@ -1,28 +1,57 @@
-export const validatePhone = (phone, persons) => {
-  let error = "";
+export const validate = (data, persons, type) => {
+  const errors = {};
 
-  if (phone.trim() === "") {
-    error = "وارد کردن موبایل الزامی است";
-  } else if (phone.length !== 11) {
-    error = "شماره موبایل باید 11 رقمی باشد";
-  } else if (phone.substring(0, 2) !== "09") {
-    error = "شماره موبایل باید با 09 شروع شود";
-  } else if (!persons.some((person) => person.phone == phone)) {
-    error = "همچین شماره موبایلی موجود نیست";
+  if (type === "login") {
+    if (data.phone.trim() === "") {
+      errors.phone = "وارد کردن موبایل الزامی است";
+    } else if (data.phone.length !== 11) {
+      errors.phone = "شماره موبایل باید 11 رقمی باشد";
+    } else if (data.phone.substring(0, 2) !== "09") {
+      errors.phone = "شماره موبایل باید با 09 شروع شود";
+    } else if (!persons.some((person) => person.phone === data.phone)) {
+      errors.phone = "همچین شماره موبایلی موجود نیست";
+    } 
+
+    if (data.password.trim() === "") {
+      errors.password = "وارد کردن رمز عبور الزامی است";
+    } else if (data.password.length < 8) {
+      errors.password = "رمز عبور نباید کمتر از 8 حرف باشد";
+    } else if (!persons.some((person) => person.password === data.password)) {
+      errors.password = "رمز عبور اشتباه است";
+    } 
   }
 
-  return error;
-};
+  if (type === "signup") {
+    if (data.name.trim() === "") {
+      errors.name = "وارد کردن نام و نام خانوادگی الزامی است";
+    } else if (!/^[\u0600-\u06FF\s]+$/.test(data.name)) {
+      errors.name = "نام و نام خانوادگی فقط میتواند دارای حروف فارسی باشد";
+    } else if (persons.some((person) => person.name === data.name)) {
+      errors.name = "قبلا ثبت نام کردی؛ از صفحه ورود، وارد حساب شو";
+    } 
 
-export const validatePassword = (password, persons) => {
-  let error = "";
+    if (data.phone.trim() === "") {
+      errors.phone = "وارد کردن موبایل الزامی است";
+    } else if (data.phone.length !== 11) {
+      errors.phone = "شماره موبایل باید 11 رقمی باشد";
+    } else if (data.phone.substring(0, 2) !== "09") {
+      errors.phone = "شماره موبایل باید با 09 شروع شود";
+    } else if (persons.some((person) => person.phone === data.phone)) {
+      errors.phone = "این شماره موبایل، قبلا ثبت شده";
+    } 
 
-  if (password.trim() === "") {
-    error = "وارد کردن رمز عبور الزامی است";
-  } else if (password.length < 8) {
-    error = "رمز عبور نباید کمتر از 8 حرف باشد";
-  } else if (!persons.some((person) => person.password == password)) {
-    error = "رمز عبور اشتباه است";
+    if (data.password.trim() === "") {
+      errors.password = "وارد کردن رمز عبور الزامی است";
+    } else if (data.password.length < 8) {
+      errors.password = "رمز عبور نباید کمتر از 8 حرف باشد";
+    } 
+
+    if (data.rePassword.trim() === "") {
+      errors.rePassword = "تکرار رمز عبور را وارد کنید"
+    } else if (data.rePassword !== data.password) {
+      errors.rePassword = "را رمز عبور وارد شده مطابقت ندارد"
+    } 
   }
-  return error;
+
+  return errors;
 };
