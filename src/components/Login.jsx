@@ -93,7 +93,7 @@ const Login = () => {
   return (
     <StyledContainer>
       <StyledGrid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={phone}
             onChange={(event) => handlePhoneChange(event)}
@@ -105,7 +105,7 @@ const Login = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -116,7 +116,7 @@ const Login = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <Button
             variant="contained"
             sx={{ fontFamily: "inherit" }}
@@ -127,7 +127,7 @@ const Login = () => {
           </Button>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <Button variant="outlined" sx={{ fontFamily: "inherit" }} fullWidth>
             <Link
               to="/signup"

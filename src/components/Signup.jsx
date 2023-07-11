@@ -76,7 +76,7 @@ const Signup = () => {
   return (
     <StyledContainer>
       <StyledGrid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={name}
             onChange={(event) => handleNameChange(event)}
@@ -87,7 +87,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={phone}
             onChange={(event) => handlePhoneChange(event)}
@@ -99,7 +99,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -110,7 +110,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <StyledTextField
             value={rePassword}
             onChange={(event) => setRePassword(event.target.value)}
@@ -121,7 +121,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <Button
             variant="contained"
             sx={{ fontFamily: "inherit" }}
@@ -132,7 +132,7 @@ const Signup = () => {
           </Button>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{px: 3}}>
           <Button variant="outlined" sx={{ fontFamily: "inherit" }} fullWidth>
             <Link to="/" style={{ textDecoration: "none", color: "black" }}>
               ورود
