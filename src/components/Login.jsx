@@ -75,6 +75,7 @@ const Login = () => {
     const errors = validate(loginData, persons, "login");
 
     console.log(errors);
+    
     if (errors.phone) setPhoneError(errors.phone);
 
     if (errors.password) setPasswordError(errors.password);
@@ -82,9 +83,7 @@ const Login = () => {
     if (Object.keys(errors).length === 0) console.log("success");
   };
 
-  if (data && data.persons) {
-    console.log(data.persons);
-  }
+  if (data && data.persons) console.log(data.persons);
 
   if (loading) return <h1>Loading...</h1>;
 

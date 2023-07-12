@@ -4,7 +4,8 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "./Login";
-import { validate } from "../helpers/functions";
+import { useCreateUser, validate } from "../helpers/functions";
+import { LoadingButton } from "@mui/lab";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -38,25 +39,28 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const [rePasswordError, setRePasswordError] = useState("");
 
+  const { createUserHandler, loading, data, error, called } = useCreateUser();
+
   const handleSignup = () => {
     setNameError("");
     setPhoneError("");
     setPasswordError("");
     setRePasswordError("");
 
-    console.log(persons);
-    const signupData = { name, phone, password, rePassword }
+    console.log("Users: ", persons);
+    const signupData = { name, phone, password, rePassword };
     const errors = validate(signupData, persons, "signup");
-    console.log(errors);
+    console.log("Errors: ", errors);
 
-    if (errors.name) setNameError(errors.name)
-    if (errors.phone) setPhoneError(errors.phone)
-    if (errors.password) setPasswordError(errors.password)
-    if (errors.rePassword) setRePasswordError(errors.rePassword)
+    if (errors.name) setNameError(errors.name);
+    if (errors.phone) setPhoneError(errors.phone);
+    if (errors.password) setPasswordError(errors.password);
+    if (errors.rePassword) setRePasswordError(errors.rePassword);
 
-    if (!Object.keys(errors).length) console.log("success");
-
-
+    if (!Object.keys(errors).length) {
+      console.log("success");
+      createUserHandler(name, phone, password);
+    }
   };
   const handlePhoneChange = (event) => {
     const input = event.target.value;
@@ -68,15 +72,15 @@ const Signup = () => {
   const handleNameChange = (event) => {
     const input = event.target.value;
     const nameRegex = /[آ-ی ]+/g;
-    const persianValue = input.match(nameRegex)?.[0] ?? '';
-  
+    const persianValue = input.match(nameRegex)?.[0] ?? "";
+
     setName(persianValue);
   };
 
   return (
     <StyledContainer>
       <StyledGrid container spacing={3}>
-        <Grid item xs={12} sx={{px: 3}}>
+        <Grid item xs={12} sx={{ px: 3 }}>
           <StyledTextField
             value={name}
             onChange={(event) => handleNameChange(event)}
@@ -87,7 +91,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12} sx={{px: 3}}>
+        <Grid item xs={12} sx={{ px: 3 }}>
           <StyledTextField
             value={phone}
             onChange={(event) => handlePhoneChange(event)}
@@ -99,7 +103,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12} sx={{px: 3}}>
+        <Grid item xs={12} sx={{ px: 3 }}>
           <StyledTextField
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -110,7 +114,7 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12} sx={{px: 3}}>
+        <Grid item xs={12} sx={{ px: 3 }}>
           <StyledTextField
             value={rePassword}
             onChange={(event) => setRePassword(event.target.value)}
@@ -121,18 +125,45 @@ const Signup = () => {
           />
         </Grid>
 
-        <Grid item xs={12} sx={{px: 3}}>
-          <Button
-            variant="contained"
-            sx={{ fontFamily: "inherit" }}
-            fullWidth
-            onClick={handleSignup}
-          >
-            ثبت نام
-          </Button>
+        <Grid item xs={12} sx={{ px: 3 }}>
+          {loading ? (
+            <LoadingButton loading fullWidth variant="outlined">
+              Submit
+            </LoadingButton>
+          ) : called ? (
+            error ? (
+              <Button
+                fullWidth
+                color="error"
+                variant="contained"
+                sx={{ fontFamily: "inherit" }}
+              >
+                ثبت‌نام با خطا مواجه شد
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{ fontFamily: "inherit" }}
+                fullWidth
+                color="success"
+              >
+                ثبت‌نام انجام شد
+              </Button>
+            )
+          ) : (
+            <Button
+              variant="contained"
+              sx={{ fontFamily: "inherit" }}
+              fullWidth
+              onClick={handleSignup}
+              disabled={loading}
+            >
+              ثبت نام
+            </Button>
+          )}
         </Grid>
 
-        <Grid item xs={12} sx={{px: 3}}>
+        <Grid item xs={12} sx={{ px: 3 }}>
           <Button variant="outlined" sx={{ fontFamily: "inherit" }} fullWidth>
             <Link to="/" style={{ textDecoration: "none", color: "black" }}>
               ورود
